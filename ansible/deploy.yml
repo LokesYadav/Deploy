@@ -1,0 +1,19 @@
+---
+- name: Deploy Application from JFrog
+  hosts: app_servers
+  become: yes
+  tasks:
+    - name: Download artifact from JFrog
+      get_url:
+        url: "https://jfrog8082.com/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
+        dest: ~/my
+-app/myapp.jar
+        url_username: "{{ admin }}"
+        url_password: "{{ Password1 }}"
+
+    - name: Stop existing app if running
+      shell: "pkill -f myapp.jar || true"
+
+    - name: Start app
+      shell: "nohup java -jar ~/my-app/myapp.jar > ~/my-app/app.log 2>&1 &"
+
