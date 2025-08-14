@@ -65,13 +65,13 @@ stage('Install sshpass if missing') {
         stage('Run Ansible Playbook') {
 
 steps {
-                export PATH="/usr/local/bin:$PATH"
-                sshpass -V
                 withCredentials([
                     usernamePassword(credentialsId: 'ansible-ssh-creds', usernameVariable: 'SSH_USER', passwordVariable: 'SSH_PASS'),
                     usernamePassword(credentialsId: 'JFROG_CRED', usernameVariable: 'JFROG_USER', passwordVariable: 'JFROG_PASSWORD')
                 ]) {
                     sh """
+                export PATH="/usr/local/bin:$PATH"
+                sshpass -V
                         ansible-playbook -i ansible/inventory.ini ansible/deploy.yml \
                         -u $SSH_USER \
                         --extra-vars "ansible_password=$SSH_PASS ansible_become_password=$SSH_PASS" \
