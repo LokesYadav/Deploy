@@ -2,7 +2,7 @@
 
 - name: Download artifact from JFrog
   get_url:
-    url: "https://http://10.28.218.243/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
+    url: "https://10.28.218.243/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
     dest: "{{ app_dir }}/myapp.jar"
     url_username: "{{ jfrog_user }}"
     url_password: "{{ jfrog_password }}"
