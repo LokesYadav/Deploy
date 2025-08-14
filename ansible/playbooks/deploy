@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        PATH = "/Users/lokesh.kumar/Library/Python/3.9/bin:${PATH}"
         JFROG_USER = credentials('JFROG_USER')
         JFROG_PASSWORD = credentials('JFROG_PASSWORD')
         }
