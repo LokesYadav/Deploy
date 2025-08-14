@@ -9,7 +9,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/LokesYadav/Deploy.git'
             }
         }
-    }
+    
         stage('Run Ansible Playbook') {
             steps {
                 // Use Jenkins credentials for JFrog
