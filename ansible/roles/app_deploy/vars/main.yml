@@ -1,0 +1,6 @@
+---
+app_dir: ~/my-app
+artifact_url: "https://jfrog8082.com/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
+jfrog_user: admin
+jfrog_password: Password1
+

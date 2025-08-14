@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    environment {
+        JFROG_USER = credentials('JFROG_USER')
+        JFROG_PASSWORD = credentials('JFROG_PASSWORD')
+        }
+
+    stages {
+        stage('Checkout Playbook') {
+            steps {
+                git branch: 'main', url: 'https://github.com/LokesYadav/Deploy.git'
+            }
+        }
+
+        stage('Run Ansible Deployment') {
+            steps {
+                sh """
+                    ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini \
+                    ${WORKSPACE}/ansible/playbooks/deploy \
+                    --extra-vars 'jfrog_user=${JFROG_USER} jfrog_password=${JFROG_PASSWORD}'
+                """
+            }
+        }
+    }
+
+
+}

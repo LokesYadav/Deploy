@@ -1,0 +1,24 @@
+
+
+- name: Download artifact from JFrog
+  get_url:
+    url: "https://jfrog8082.com/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
+    dest: "{{ app_dir }}/myapp.jar"
+    url_username: "{{ jfrog_user }}"
+    url_password: "{{ jfrog_password }}"
+    mode: '0755'
+
+
+- name: Stop existing app if running
+  shell: |
+    if pgrep -f myapp.jar > /dev/null; then
+      pkill -f myapp.jar
+    fi
+
+
+- name: Start app if not running
+  shell: >
+    nohup java -jar {{ app_dir }}/myapp.jar
+    > {{ app_dir }}/app.log 2>&1 &
+  args:
+    chdir: "{{ app_dir }}"
