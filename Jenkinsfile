@@ -38,7 +38,7 @@ stage('Install sshpass if missing') {
         if ! command -v sshpass >/dev/null 2>&1; then
             echo "🔍 sshpass not found — installing..."
             if [[ "$OSTYPE" == "darwin"* ]]; then
-                brew install hudochenkov/sshpass/sshpass
+                /usr/local/bin/brew install hudochenkov/sshpass/sshpass
             elif [ -f /etc/debian_version ]; then
                 sudo apt update && sudo apt install -y sshpass
             elif [ -f /etc/redhat-release ]; then
