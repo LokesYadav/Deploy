@@ -1,29 +1,11 @@
-pipeline {
-    agent any
+---
+- name: Deploy application using role
+  hosts: all
+  become: yes
 
-    environment {
-        PATH = "/Users/lokesh.kumar/Library/Python/3.9/bin:${PATH}"
-        JFROG_USER = credentials('JFROG_USER')
-        JFROG_PASSWORD = credentials('JFROG_PASSWORD')
-        }
+  vars:
+    jfrog_user: "{{ jfrog_user }}"
+    jfrog_password: "{{ jfrog_password }}"
 
-    stages {
-        stage('Checkout Playbook') {
-            steps {
-                git branch: 'main', url: 'https://github.com/LokesYadav/Deploy.git'
-            }
-        }
-
-        stage('Run Ansible Deployment') {
-            steps {
-                sh """
-                    ansible-playbook -i ${WORKSPACE}/ansible/inventory.ini \
-                    ${WORKSPACE}/ansible/playbooks/deploy \
-                    --extra-vars 'jfrog_user=${JFROG_USER} jfrog_password=${JFROG_PASSWORD}'
-                """
-            }
-        }
-    }
-
-
-}
+  roles:
+    - app_deploy
