@@ -40,7 +40,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'JFROG_CRED', usernameVariable: 'JFROG_USER', passwordVariable: 'JFROG_PASSWORD')]) {
                     sh '''
-                        ansible-playbook -i ansible/inventory.ini ansible/playbooks/deploy \
+                        ansible-playbook -i ansible/inventory.ini ansible/playbooks/deploy.yml \
                         --extra-vars "jfrog_user=${JFROG_USER} jfrog_password=${JFROG_PASSWORD}"
                     '''
                 }
