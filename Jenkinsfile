@@ -29,7 +29,33 @@ pipeline {
     environment {
         PATH = "/Users/lokesh.kumar/Library/Python/3.9/bin:${PATH}"
     }
+    
     stages {
+
+stage('Install sshpass if missing') {
+    steps {
+        sh '''
+        if ! command -v sshpass >/dev/null 2>&1; then
+            echo "🔍 sshpass not found — installing..."
+            if [[ "$OSTYPE" == "darwin"* ]]; then
+                brew install hudochenkov/sshpass/sshpass
+            elif [ -f /etc/debian_version ]; then
+                sudo apt update && sudo apt install -y sshpass
+            elif [ -f /etc/redhat-release ]; then
+                sudo yum install -y sshpass
+            else
+                echo "❌ Unsupported OS — please install sshpass manually."
+                exit 1
+            fi
+        else
+            echo "✅ sshpass already installed."
+        fi
+        '''
+    }
+}
+
+
+        
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/LokesYadav/Deploy.git'
