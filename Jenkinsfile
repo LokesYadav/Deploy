@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        PATH = "/Users/lokesh.kumar/Library/Python/3.9/bin/ansible-playbook"
+        }
     stages {
         stage('Checkout') {
             steps {
