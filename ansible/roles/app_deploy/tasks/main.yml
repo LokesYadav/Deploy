@@ -1,102 +1,41 @@
-# - name: Ensure destination directory exists
-#   file:
-#     path: /opt/rovi/ids-service
-#     state: directory
-#     mode: '0755'
+- name: Ensure destination directory exists
+  file:
+    path: /opt/rovi/ids-service
+    state: directory
+    mode: '0755'
 
 
-# - name: Download artifact from JFrog
-#   get_url:
-#     url: "http://10.28.218.243:8082/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
-#     dest: "/opt/rovi/ids-service/"
-#     url_username: "{{ jfrog_user }}"
-#     url_password: "{{ jfrog_password }}"
-#     mode: '0755'
+- name: Download artifact from JFrog
+  get_url:
+    url: "http://10.28.218.243:8082/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
+    dest: "/opt/rovi/ids-service/"
+    url_username: "{{ jfrog_user }}"
+    url_password: "{{ jfrog_password }}"
+    mode: '0755'
 
 
-# - name: Stop existing app if running
-#   shell: |
-#     if pgrep -f myapp.jar > /dev/null; then
-#       pkill -f myapp.jar
-#     fi
-#   args:
-#     executable: /bin/bash
-#   register: stop_result
-#   failed_when: false
-#   changed_when: stop_result.rc == 0
+- name: Stop existing app if running
+  shell: |
+    if pgrep -f myapp.jar > /dev/null; then
+      pkill -f myapp.jar
+    fi
+  args:
+    executable: /bin/bash
+  register: stop_result
+  failed_when: false
+  changed_when: stop_result.rc == 0
 
 
-# - name: Start app if not running
-#   shell: |
-#     if ! pgrep -f maven-demo-1.0-SNAPSHOT.jar > /dev/null; then
-#       nohup java -jar /opt/rovi/ids-service/maven-demo-1.0-SNAPSHOT.jar > /opt/rovi/ids-service/app.log 2>&1 &
-#     fi
-#   args:
-#     chdir: "/opt/rovi/ids-service"
-#     executable: /bin/bash
-#   register: start_result
-#   failed_when: false
-#   changed_when: start_result.rc == 0
+- name: Start app if not running
+  shell: |
+    if ! pgrep -f maven-demo-1.0-SNAPSHOT.jar > /dev/null; then
+      nohup java -jar /opt/rovi/ids-service/maven-demo-1.0-SNAPSHOT.jar > /opt/rovi/ids-service/app.log 2>&1 &
+    fi
+  args:
+    chdir: "/opt/rovi/ids-service"
+    executable: /bin/bash
+  register: start_result
+  failed_when: false
+  changed_when: start_result.rc == 0
 
-- name: Deploy IDS service from JFrog
-  hosts: all
-  become: yes
-  vars:
-    jfrog_user: "jfrog_user"
-    jfrog_password: "jfrog_password"
-
-  tasks:
-    - name: Ensure destination directory exists
-      ansible.builtin.file:
-        path: /opt/rovi/ids-service
-        state: directory
-        mode: '0755'
-
-    - name: Download artifact from JFrog
-      ansible.builtin.get_url:
-        url: "http://10.28.218.243:8082/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
-        dest: "/opt/rovi/ids-service/maven-demo-1.0-SNAPSHOT.jar"
-        url_username: "{{ jfrog_user }}"
-        url_password: "{{ jfrog_password }}"
-        mode: '0755'
-
-    - name: Create systemd service file for IDS
-      ansible.builtin.copy:
-        dest: /etc/systemd/system/ids-service.service
-        content: |
-          [Unit]
-          Description=IDS Service
-          After=network.target
-
-          [Service]
-          ExecStart=/usr/bin/java -jar /opt/rovi/ids-service/maven-demo-1.0-SNAPSHOT.jar
-          Restart=always
-          User=root
-          WorkingDirectory=/opt/rovi/ids-service
-
-          [Install]
-          WantedBy=multi-user.target
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Reload systemd to pick up new service
-      ansible.builtin.systemd:
-        daemon_reload: yes
-
-    - name: Stop IDS service if running
-      ansible.builtin.systemd:
-        name: ids-service
-        state: stopped
-      ignore_errors: yes
-
-    - name: Enable IDS service on boot
-      ansible.builtin.systemd:
-        name: ids-service
-        enabled: yes
-
-    - name: Start IDS service
-      ansible.builtin.systemd:
-        name: ids-service
-        state: started
 
