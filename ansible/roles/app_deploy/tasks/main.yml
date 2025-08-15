@@ -38,8 +38,6 @@
 #   failed_when: false
 #   changed_when: start_result.rc == 0
 
-
----
 - name: Deploy IDS service from JFrog
   hosts: all
   become: yes
