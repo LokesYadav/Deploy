@@ -1,9 +1,14 @@
-- name: Ensure destination directory exists
+- name: Check if destination directory exists
+  stat:
+    path: /opt/rovi/ids-service
+  register: dir_status
+
+- name: Create destination directory if not exists
   file:
     path: /opt/rovi/ids-service
     state: directory
     mode: '0755'
-
+  when: not dir_status.stat.exists
 
 - name: Download artifact from JFrog
   get_url:
