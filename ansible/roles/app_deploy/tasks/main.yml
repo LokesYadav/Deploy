@@ -3,7 +3,7 @@
 - name: Download artifact from JFrog
   get_url:
     url: "http://10.28.218.243:8082/artifactory/my-repo-local/maven-demo-1.0-SNAPSHOT.jar"
-    dest: "/opt/"
+    dest: "/opt/rovi/ids-service/"
     url_username: "{{ jfrog_user }}"
     url_password: "{{ jfrog_password }}"
     mode: '0755'
@@ -24,10 +24,10 @@
 - name: Start app if not running
   shell: |
     if ! pgrep -f maven-demo-1.0-SNAPSHOT.jar > /dev/null; then
-      nohup java -jar /opt/maven-demo-1.0-SNAPSHOT.jar > /opt/app.log 2>&1 &
+      nohup java -jar /opt/rovi/ids-service/maven-demo-1.0-SNAPSHOT.jar > /opt/rovi/ids-service/app.log 2>&1 &
     fi
   args:
-    chdir: "/opt"
+    chdir: "/opt/rovi/ids-service"
     executable: /bin/bash
   register: start_result
   failed_when: false
