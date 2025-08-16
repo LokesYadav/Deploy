@@ -30,12 +30,18 @@
   failed_when: false
   changed_when: stop_result.rc == 0
 
-- name: Update datamill_client.base_uri
+- name: Ensure application.properties exists
+  file:
+    path: /opt/rovi/ids-service/application.properties
+    state: touch
+    mode: '0644'
+
+- name: Update datamill_client.base_uri in application.properties
   lineinfile:
     path: /opt/rovi/ids-service/application.properties
-    regexp: '^datamill_client.base_uri='
-    line: "datamill_client.base_uri=http://tul1mdq1rrm0110:8011/l1/datamill1"
-    backup: yes
+    regexp: '^datamill_client\.base_uri='
+    line: 'datamill_client.base_uri=http://tul1mdq1rrm0110:8085/v1/datamill'
+    create: yes
 
 - name: Update dweet.pathArg
   lineinfile:
