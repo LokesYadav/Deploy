@@ -39,7 +39,8 @@
 - name: Start app if not running
   shell: |
     if ! pgrep -f maven-demo-1.0-SNAPSHOT.jar > /dev/null; then
-      nohup java -jar /opt/rovi/ids-service/maven-demo-1.0-SNAPSHOT.jar > /opt/rovi/ids-service/app.log 2>&1 &
+      nohup java -jar /opt/rovi/ids-service/maven-demo-1.0-SNAPSHOT.jar \
+      > /opt/rovi/log/metrics-processor/app.log 2>&1 &
     fi
   args:
     chdir: "/opt/rovi/ids-service"
@@ -47,5 +48,6 @@
   register: start_result
   failed_when: false
   changed_when: start_result.rc == 0
+
 
 
