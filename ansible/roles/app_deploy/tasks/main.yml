@@ -34,7 +34,7 @@
   lineinfile:
     path: /opt/rovi/ids-service/application.properties
     regexp: '^datamill_client.base_uri='
-    line: "datamill_client.base_uri=http://tul1mdq1rrm01:8011/l1/datamill1"
+    line: "datamill_client.base_uri=http://tul1mdq1rrm0110:8011/l1/datamill1"
     backup: yes
 
 - name: Update dweet.pathArg
