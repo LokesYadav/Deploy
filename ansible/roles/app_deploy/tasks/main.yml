@@ -29,7 +29,12 @@
   register: stop_result
   failed_when: false
   changed_when: stop_result.rc == 0
-
+  
+- name: Ensure log directory exists
+  file:
+    path: /opt/rovi/log/metrics-processor
+    state: directory
+    mode: '0755'
 
 - name: Start app if not running
   shell: |
