@@ -29,6 +29,20 @@
   register: stop_result
   failed_when: false
   changed_when: stop_result.rc == 0
+
+  - name: Update datamill_client.base_uri
+  lineinfile:
+    path: /opt/rovi/ids-service/application.properties
+    regexp: '^datamill_client.base_uri='
+    line: "datamill_client.base_uri=http://tul1mdq1rrm01:8085/v1/datamill"
+    backup: yes
+
+- name: Update dweet.pathArg
+  lineinfile:
+    path: /opt/rovi/ids-service/application.properties
+    regexp: '^dweet.pathArg='
+    line: "dweet.pathArg=dev"
+    backup: yes
   
 - name: Ensure log directory exists
   file:
